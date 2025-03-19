@@ -1,3 +1,5 @@
 flask
 pytube
 gunicorn
+yt-dlp
+
