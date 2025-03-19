@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h2>YouTube Video Downloader</h2>
+    <input type="text" id="video_url" placeholder="Enter YouTube URL">
+    <button onclick="downloadVideo()">Download</button>
+    <p id="status"></p>
+
+    <script>
+        function downloadVideo() {
+            const url = document.getElementById("video_url").value;
+            document.getElementById("status").innerText = "Downloading...";
+
+            fetch('/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("status").innerText = data.message;
+                if (data.link) {
+                    const a = document.createElement("a");
+                    a.href = data.link;
+                    a.download = "";
+                    a.innerText = "Click here to download";
+                    document.body.appendChild(a);
+                }
+            })
+            .catch(error => {
+                document.getElementById("status").innerText = "Error downloading video";
+            });
+        }
+    </script>
+</body>
+</html>
